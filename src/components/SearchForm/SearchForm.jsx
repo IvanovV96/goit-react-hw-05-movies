@@ -1,26 +1,43 @@
-import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { useSearchParams } from 'react-router-dom';
 import { fetchMoviesByName } from 'services/axios';
+import { Input, SearchButton } from './SearchForm.styled';
 
-export const SearchForm = ({ getFilms }) => {
+const SearchForm = ({ getFilms }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get('query');
   const onChange = e => {
     setSearchParams({ query: e.target.value });
   };
-  const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get('query');
   const onSubmit = async e => {
     e.preventDefault();
+    const form = e.currentTarget;
+    const inputValue = form.elements.search.value;
+    if (!inputValue.trim()) {
+      alert('try again');
+      return;
+    }
     const data = await fetchMoviesByName(query);
-
+    setSearchParams({ query });
     getFilms(data.data.results);
-    setSearchParams('');
   };
   return (
     <form onSubmit={onSubmit}>
       <label>
-        <input type="text" value={query ?? ''} onChange={onChange} />
+        <Input
+          type="text"
+          value={query ?? ''}
+          name="search"
+          onChange={onChange}
+        />
       </label>
-      <button type="submit">Search</button>
+      <SearchButton type="submit">Search</SearchButton>
     </form>
   );
+};
+
+export default SearchForm;
+
+SearchForm.propTypes = {
+  getFilms: PropTypes.func.isRequired,
 };

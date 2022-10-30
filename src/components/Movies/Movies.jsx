@@ -1,18 +1,26 @@
-import { MoviesList } from 'components/MoviesList/MoviesList';
-import { SearchForm } from 'components/SearchForm/SearchForm';
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import MoviesList from 'components/MoviesList';
+import SearchForm from 'components/SearchForm/SearchForm';
+import Box from 'components/Box/Box';
 
-export const Movies = () => {
+const Movies = () => {
   const [films, setFilms] = useState([]);
 
   const getFilms = films => {
     setFilms(films);
   };
   return (
-    <>
+    <Box textAlign="center" p="20px">
       <SearchForm getFilms={getFilms} />
-      <MoviesList films={films} />
-    </>
+      {films.length > 0 ? (
+        <MoviesList films={films} />
+      ) : (
+        <Box mt="20px">
+          <p>There is no films yet..</p>
+        </Box>
+      )}
+    </Box>
   );
 };
+
+export default Movies;

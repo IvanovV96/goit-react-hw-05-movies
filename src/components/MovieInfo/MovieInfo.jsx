@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import Box from 'components/Box/Box';
+import Loader from 'components/Loader';
+import { ListItem } from 'components/TrendingFilms/TrendingFilms.styled';
+import { Suspense, useEffect, useState } from 'react';
 import { NavLink, Outlet, useParams } from 'react-router-dom';
 import { fetchMovieById, IMG_URL } from 'services/axios';
 
-export const MovieInfo = () => {
+const MovieInfo = () => {
   const { movieId } = useParams();
   const [movie, setMovie] = useState({});
   useEffect(() => {
@@ -17,28 +20,47 @@ export const MovieInfo = () => {
     movie;
 
   return (
-    <div>
-      {poster_path && <img src={`${IMG_URL}${poster_path}`} alt={title} />}
-      <h2>
-        {release_date && (
-          <p>
-            Title: {title}({release_date.substring(0, 4)})
-          </p>
+    <Box p="20px">
+      <Box display="flex">
+        {poster_path && (
+          <img src={`${IMG_URL}${poster_path}`} alt={title} width="300px" />
         )}
-        <p>User score: {vote_average}</p>
-        <p>Overview: {overview}</p>
-        <p>Genres: {genres && genres.map(genre => genre.name + ' ')}</p>
-      </h2>
-      <p>Additional information</p>
-      <ul>
-        <li>
-          <NavLink to={'cast'}>Cast</NavLink>
-        </li>
-        <li>
-          <NavLink to={'reviews'}>Reviews</NavLink>
-        </li>
-      </ul>
-      <Outlet />
-    </div>
+        <Box display="flex" flexDirection="column" ml="10px">
+          {release_date && (
+            <h2 style={{ margin: 0 }}>
+              Title: {title}({release_date.substring(0, 4)})
+            </h2>
+          )}
+
+          <p>
+            <b>User score:</b> {vote_average}
+          </p>
+          <p>
+            <b>Overview:</b> {overview}
+          </p>
+          <p>
+            <b>Genres:</b> {genres && genres.map(genre => genre.name + ' ')}
+          </p>
+        </Box>
+      </Box>
+      <Box mt="20px" textAlign="center">
+        <p>
+          <b>Additional information</b>
+        </p>
+        <ul>
+          <ListItem>
+            <NavLink to={'cast'}>Cast</NavLink>
+          </ListItem>
+          <ListItem>
+            <NavLink to={'reviews'}>Reviews</NavLink>
+          </ListItem>
+        </ul>
+      </Box>
+      <Suspense fallback={<Loader />}>
+        <Outlet />
+      </Suspense>
+    </Box>
   );
 };
+
+export default MovieInfo;
