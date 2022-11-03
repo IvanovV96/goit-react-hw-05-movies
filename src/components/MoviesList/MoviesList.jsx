@@ -1,15 +1,17 @@
 import PropTypes from 'prop-types';
 import { List, ListItem } from 'components/TrendingFilms/TrendingFilms.styled';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { IMG_URL } from 'services/axios';
 import img from 'placeholder-img.png';
 
 const MoviesList = ({ films }) => {
+  const location = useLocation();
+
   return (
     <List>
       {films.map(({ id, title, poster_path = img }) => (
         <ListItem key={id}>
-          <NavLink to={`${id}`}>
+          <NavLink to={`${id}`} state={{ from: location }}>
             <img
               src={`${IMG_URL}${poster_path}`}
               alt={title}
@@ -27,9 +29,5 @@ const MoviesList = ({ films }) => {
 export default MoviesList;
 
 MoviesList.propTypes = {
-  films: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    poster_path: PropTypes.string,
-  }),
+  films: PropTypes.array,
 };

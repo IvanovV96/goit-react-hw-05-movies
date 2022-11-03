@@ -5,9 +5,9 @@ import { Input, SearchButton } from './SearchForm.styled';
 
 const SearchForm = ({ getFilms }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get('query');
+  const query = searchParams.get('query') ?? '';
   const onChange = e => {
-    setSearchParams({ query: e.target.value });
+    setSearchParams(e.target.value !== '' ? { query: e.target.value } : {});
   };
   const onSubmit = async e => {
     e.preventDefault();
@@ -24,12 +24,7 @@ const SearchForm = ({ getFilms }) => {
   return (
     <form onSubmit={onSubmit}>
       <label>
-        <Input
-          type="text"
-          value={query ?? ''}
-          name="search"
-          onChange={onChange}
-        />
+        <Input type="text" value={query} name="search" onChange={onChange} />
       </label>
       <SearchButton type="submit">Search</SearchButton>
     </form>

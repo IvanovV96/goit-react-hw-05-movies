@@ -9,6 +9,9 @@ const Movies = () => {
   const getFilms = films => {
     setFilms(films);
   };
+  if (!films) {
+    return null;
+  }
   return (
     <Box textAlign="center" p="20px">
       <SearchForm getFilms={getFilms} />

@@ -1,6 +1,6 @@
 import { List, ListItem } from 'components/TrendingFilms/TrendingFilms.styled';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { fetchCreditsById, IMG_URL } from 'services/axios';
 import img from 'placeholder-img.png';
 import Box from 'components/Box/Box';
@@ -8,6 +8,7 @@ import Box from 'components/Box/Box';
 const Cast = () => {
   const { movieId } = useParams();
   const [cast, setCast] = useState([]);
+  const location = useLocation();
   useEffect(() => {
     const getFilm = async () => {
       const data = await fetchCreditsById(movieId);

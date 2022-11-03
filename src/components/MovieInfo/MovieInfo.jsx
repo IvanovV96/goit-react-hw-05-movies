@@ -2,12 +2,21 @@ import Box from 'components/Box/Box';
 import Loader from 'components/Loader';
 import { ListItem } from 'components/TrendingFilms/TrendingFilms.styled';
 import { Suspense, useEffect, useState } from 'react';
-import { NavLink, Outlet, useParams } from 'react-router-dom';
+import {
+  Link,
+  NavLink,
+  Outlet,
+  useLocation,
+  useParams,
+} from 'react-router-dom';
 import { fetchMovieById, IMG_URL } from 'services/axios';
+import { IoArrowBackOutline } from 'react-icons/io5';
 
 const MovieInfo = () => {
   const { movieId } = useParams();
   const [movie, setMovie] = useState({});
+  const location = useLocation();
+
   useEffect(() => {
     const getFilm = async () => {
       const data = await fetchMovieById(movieId);
@@ -16,11 +25,21 @@ const MovieInfo = () => {
     getFilm();
   }, [movieId]);
 
+  if (!movie) {
+    return null;
+  }
+
   const { poster_path, title, overview, genres, vote_average, release_date } =
     movie;
 
   return (
     <Box p="20px">
+      <Link to={location.state?.from ?? '/movies'}>
+        <Box display="flex" alignItems="center" p="10px">
+          <IoArrowBackOutline />
+          Go back
+        </Box>
+      </Link>
       <Box display="flex">
         {poster_path && (
           <img src={`${IMG_URL}${poster_path}`} alt={title} width="300px" />
@@ -49,10 +68,14 @@ const MovieInfo = () => {
         </p>
         <ul>
           <ListItem>
-            <NavLink to={'cast'}>Cast</NavLink>
+            <NavLink to={'cast'} state={{ from: location.state.from }}>
+              Cast
+            </NavLink>
           </ListItem>
           <ListItem>
-            <NavLink to={'reviews'}>Reviews</NavLink>
+            <NavLink to={'reviews'} state={{ from: location.state.from }}>
+              Reviews
+            </NavLink>
           </ListItem>
         </ul>
       </Box>

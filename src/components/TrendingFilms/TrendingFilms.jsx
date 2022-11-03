@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { fetchTrendingData, IMG_URL } from 'services/axios';
 import { List, ListItem } from './TrendingFilms.styled';
 
 const TrendingFilms = () => {
   const [trendFilms, setTrendFilms] = useState([]);
   const [error, setError] = useState('');
+  const location = useLocation();
   useEffect(() => {
     const getTrendingFilms = async () => {
       try {
@@ -22,7 +23,7 @@ const TrendingFilms = () => {
     <List>
       {trendFilms.map(({ id, original_title, poster_path }) => (
         <ListItem key={id}>
-          <NavLink to={`movies/${id}`}>
+          <NavLink to={`movies/${id}`} state={{ from: location }}>
             <img
               src={`${IMG_URL}${poster_path}`}
               alt={original_title}
