@@ -1,27 +1,25 @@
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { fetchMoviesByName } from 'services/axios';
 import { Input, SearchButton } from './SearchForm.styled';
 
-const SearchForm = ({ getFilms }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get('query') ?? '';
+const SearchForm = ({ getQuery }) => {
+  const [query, setQuery] = useState('');
+  const [searchParams] = useSearchParams();
+  useEffect(() => {
+    setQuery(searchParams.get('query') ?? '');
+  }, [searchParams]);
+
   const onChange = e => {
-    setSearchParams(e.target.value !== '' ? { query: e.target.value } : {});
+    setQuery(e.target.value);
   };
   const onSubmit = async e => {
     e.preventDefault();
-    const form = e.currentTarget;
-    const inputValue = form.elements.search.value;
-    if (!inputValue.trim()) {
+    if (!query.trim()) {
       alert('try again');
-      localStorage.setItem('films', []);
       return;
     }
-    const data = await fetchMoviesByName(query);
-    setSearchParams({ query });
-    localStorage.setItem('films', JSON.stringify(data.data.results));
-    getFilms(data.data.results);
+    getQuery(query);
   };
   return (
     <form onSubmit={onSubmit}>
@@ -36,5 +34,5 @@ const SearchForm = ({ getFilms }) => {
 export default SearchForm;
 
 SearchForm.propTypes = {
-  getFilms: PropTypes.func.isRequired,
+  getQuery: PropTypes.func.isRequired,
 };
