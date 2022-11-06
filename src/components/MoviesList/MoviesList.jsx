@@ -6,14 +6,13 @@ import img from 'placeholder-img.png';
 
 const MoviesList = ({ films }) => {
   const location = useLocation();
-
   return (
     <List>
-      {films.map(({ id, title, poster_path = img }) => (
+      {films.map(({ id, title, poster_path }) => (
         <ListItem key={id}>
           <NavLink to={`${id}`} state={{ from: location }}>
             <img
-              src={`${IMG_URL}${poster_path}`}
+              src={poster_path ? `${IMG_URL}${poster_path}` : img}
               alt={title}
               width="300"
               onError={e => (e.target.src = img)}

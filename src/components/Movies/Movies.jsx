@@ -2,19 +2,14 @@ import { useState } from 'react';
 import MoviesList from 'components/MoviesList';
 import SearchForm from 'components/SearchForm/SearchForm';
 import Box from 'components/Box/Box';
+import { parseDataFromLS } from 'services/parseDataFromLS';
 
 const Movies = () => {
-  const [films, setFilms] = useState([]);
+  const [films, setFilms] = useState(() => parseDataFromLS('films'));
 
-  const getFilms = films => {
-    setFilms(films);
-  };
-  if (!films) {
-    return null;
-  }
   return (
     <Box textAlign="center" p="20px">
-      <SearchForm getFilms={getFilms} />
+      <SearchForm getFilms={setFilms} />
       {films.length > 0 ? (
         <MoviesList films={films} />
       ) : (

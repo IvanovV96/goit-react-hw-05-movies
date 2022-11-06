@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { fetchTrendingData, IMG_URL } from 'services/axios';
 import { List, ListItem } from './TrendingFilms.styled';
+import img from 'placeholder-img.png';
 
 const TrendingFilms = () => {
   const [trendFilms, setTrendFilms] = useState([]);
@@ -25,7 +26,7 @@ const TrendingFilms = () => {
         <ListItem key={id}>
           <NavLink to={`movies/${id}`} state={{ from: location }}>
             <img
-              src={`${IMG_URL}${poster_path}`}
+              src={poster_path ? `${IMG_URL}${poster_path}` : img}
               alt={original_title}
               width="300"
             />

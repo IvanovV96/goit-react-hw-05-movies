@@ -16,7 +16,7 @@ const MovieInfo = () => {
   const { movieId } = useParams();
   const [movie, setMovie] = useState({});
   const location = useLocation();
-
+  const backLinkHref = location.state?.from;
   useEffect(() => {
     const getFilm = async () => {
       const data = await fetchMovieById(movieId);
@@ -34,7 +34,7 @@ const MovieInfo = () => {
 
   return (
     <Box p="20px">
-      <Link to={location.state?.from ?? '/movies'}>
+      <Link to={backLinkHref ?? '/movies'}>
         <Box display="flex" alignItems="center" p="10px">
           <IoArrowBackOutline />
           Go back
@@ -68,12 +68,12 @@ const MovieInfo = () => {
         </p>
         <ul>
           <ListItem>
-            <NavLink to={'cast'} state={{ from: location.state.from }}>
+            <NavLink to={'cast'} state={{ from: location.state?.from }}>
               Cast
             </NavLink>
           </ListItem>
           <ListItem>
-            <NavLink to={'reviews'} state={{ from: location.state.from }}>
+            <NavLink to={'reviews'} state={{ from: location.state?.from }}>
               Reviews
             </NavLink>
           </ListItem>

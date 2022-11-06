@@ -15,10 +15,12 @@ const SearchForm = ({ getFilms }) => {
     const inputValue = form.elements.search.value;
     if (!inputValue.trim()) {
       alert('try again');
+      localStorage.setItem('films', []);
       return;
     }
     const data = await fetchMoviesByName(query);
     setSearchParams({ query });
+    localStorage.setItem('films', JSON.stringify(data.data.results));
     getFilms(data.data.results);
   };
   return (
